@@ -1,0 +1,52 @@
+const int ldrPin = A0;  // Analog pin connected to LDR
+const int buzzerPin = 8;  // Digital pin connected to buzzer
+const int laserPin = 13;  // Digital pin connected to laser module
+
+void setup() {
+  // Initialize the laser pin as an output
+  pinMode(laserPin, OUTPUT);
+  // Initialize the buzzer pin as an output
+  pinMode(buzzerPin, OUTPUT);
+  // Initialize serial communication for debugging
+  Serial.begin(9600);
+  
+  // Turn on the laser module
+  digitalWrite(laserPin, HIGH);
+}
+
+void loop() {
+  // Read the value from the LDR
+  int ldrValue = analogRead(ldrPin);
+  
+  // Print the LDR value to the Serial Monitor
+  Serial.print("LDR Value: ");
+  Serial.println(ldrValue);
+
+  // If the laser beam is interrupted, trigger the buzzer
+  if (ldrValue < 300) { // Adjust the threshold value as needed
+    digitalWrite(buzzerPin, HIGH);
+    Serial.println("Intruder detected!");
+  } else {
+    // If the laser beam is not interrupted, turn off the buzzer
+    digitalWrite(buzzerPin, LOW);
+  }
+
+  // Wait for a short period before reading the LDR value again
+  delay(100);
+}
+
+/*
+  Connections:
+  1. Laser Module:
+     - VCC (Power) -> 5V on Arduino
+     - GND (Ground) -> GND on Arduino
+
+  2. Photoresistor (LDR):
+     - One end to 5V
+     - The other end to Analog pin A0 on Arduino
+     - A 10k ohm resistor between the LDR end connected to A0 and GND
+
+  3. Buzzer:
+     - Positive lead -> Digital pin 8 on Arduino
+     - Negative lead -> GND
+*/
