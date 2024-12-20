@@ -1,0 +1,43 @@
+// Sound Sensor-controlled LED
+
+const int soundPin = A0; // Analog pin connected to sound sensor output
+const int ledPin = 13;   // Digital pin connected to LED
+
+void setup() {
+  // Initialize the LED pin as an output:
+  pinMode(ledPin, OUTPUT);
+  // Initialize serial communication for debugging:
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read the value from the sound sensor:
+  int sensorValue = analogRead(soundPin);
+
+  // Print the sensor value to the Serial Monitor:
+  Serial.print("Sound Sensor Value: ");
+  Serial.println(sensorValue);
+
+  // If the sound level exceeds a threshold, turn the LED on:
+  if (sensorValue > 500) {
+    digitalWrite(ledPin, HIGH);
+  } else {
+    // If the sound level is below the threshold, turn the LED off:
+    digitalWrite(ledPin, LOW);
+  }
+
+  // Wait for a short period before reading the sensor value again:
+  delay(100);
+}
+
+/*
+  Connections:
+  1. Sound Sensor:
+     - VCC (Power) -> 5V on Arduino
+     - GND (Ground) -> GND on Arduino
+     - OUT (Output) -> Analog pin A0 on Arduino
+
+  2. LED:
+     - Anode (longer leg) -> Digital pin 13 on Arduino
+     - Cathode (shorter leg) -> 220-ohm resistor -> GND
+*/
