@@ -1,0 +1,33 @@
+#include <LiquidCrystal.h>
+
+// Initialize the LCD library with the pins
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+const int gasSensorPins[] = {A0, A1, A2, A3, A4, A5};
+const int numSensors = 6;
+
+void setup() {
+  // Initialize the LCD
+  lcd.begin(16, 2);
+  lcd.print("Gas Levels:");
+  
+  // Initialize the gas sensor pins as inputs
+  for (int i = 0; i < numSensors; i++) {
+    pinMode(gasSensorPins[i], INPUT);
+  }
+}
+
+void loop() {
+  // Read values from each gas sensor
+  for (int i = 0; i < numSensors; i++) {
+    int sensorValue = analogRead(gasSensorPins[i]);
+    lcd.setCursor(0, i + 1);
+    lcd.print("Sensor ");
+    lcd.print(i + 1);
+    lcd.print(": ");
+    lcd.print(sensorValue);
+    lcd.print(" (V)");
+    lcd.print(" ");
+    delay(1000);
+  }
+}
