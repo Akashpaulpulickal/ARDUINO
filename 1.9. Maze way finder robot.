@@ -1,0 +1,74 @@
+// Define the pins for the IR sensors and motors
+#define LEFT_SENSOR A0 // Left IR sensor connected to analog pin A0
+#define RIGHT_SENSOR A1 // Right IR sensor connected to analog pin A1
+#define FRONT_SENSOR A2 // Front IR sensor connected to analog pin A2
+#define LEFT_MOTOR_FORWARD 9 // Left motor forward pin connected to digital pin 9
+#define LEFT_MOTOR_BACKWARD 10 // Left motor backward pin connected to digital pin 10
+#define RIGHT_MOTOR_FORWARD 11 // Right motor forward pin connected to digital pin 11
+#define RIGHT_MOTOR_BACKWARD 12 // Right motor backward pin connected to digital pin 12
+
+void setup() {
+  // Set the sensor pins as input
+  pinMode(LEFT_SENSOR, INPUT); // Set left sensor pin as input
+  pinMode(RIGHT_SENSOR, INPUT); // Set right sensor pin as input
+  pinMode(FRONT_SENSOR, INPUT); // Set front sensor pin as input
+
+  // Set the motor pins as output
+  pinMode(LEFT_MOTOR_FORWARD, OUTPUT); // Set left motor forward pin as output
+  pinMode(LEFT_MOTOR_BACKWARD, OUTPUT); // Set left motor backward pin as output
+  pinMode(RIGHT_MOTOR_FORWARD, OUTPUT); // Set right motor forward pin as output
+  pinMode(RIGHT_MOTOR_BACKWARD, OUTPUT); // Set right motor backward pin as output
+}
+
+void loop() {
+  // Read the sensor values
+  int leftSensorValue = analogRead(LEFT_SENSOR); // Read value from left sensor
+  int rightSensorValue = analogRead(RIGHT_SENSOR); // Read value from right sensor
+  int frontSensorValue = analogRead(FRONT_SENSOR); // Read value from front sensor
+
+  // Define the threshold for detecting walls
+  int threshold = 500;
+
+  // Check the sensor values and control the motors accordingly
+  if (frontSensorValue > threshold) {
+    // Front sensor detects a wall, turn left
+    turnLeft();
+  } else if (leftSensorValue < threshold) {
+    // Left sensor detects no wall, turn left
+    turnLeft();
+  } else if (rightSensorValue < threshold) {
+    // Right sensor detects no wall, turn right
+    turnRight();
+  } else {
+    // Move forward
+    moveForward();
+  }
+}
+
+void moveForward() {
+  digitalWrite(LEFT_MOTOR_FORWARD, HIGH); // Move left motor forward
+  digitalWrite(LEFT_MOTOR_BACKWARD, LOW); // Ensure left motor backward is off
+  digitalWrite(RIGHT_MOTOR_FORWARD, HIGH); // Move right motor forward
+  digitalWrite(RIGHT_MOTOR_BACKWARD, LOW); // Ensure right motor backward is off
+}
+
+void turnRight() {
+  digitalWrite(LEFT_MOTOR_FORWARD, HIGH); // Move left motor forward
+  digitalWrite(LEFT_MOTOR_BACKWARD, LOW); // Ensure left motor backward is off
+  digitalWrite(RIGHT_MOTOR_FORWARD, LOW); // Stop right motor forward
+  digitalWrite(RIGHT_MOTOR_BACKWARD, LOW); // Ensure right motor backward is off
+}
+
+void turnLeft() {
+  digitalWrite(LEFT_MOTOR_FORWARD, LOW); // Stop left motor forward
+  digitalWrite(LEFT_MOTOR_BACKWARD, LOW); // Ensure left motor backward is off
+  digitalWrite(RIGHT_MOTOR_FORWARD, HIGH); // Move right motor forward
+  digitalWrite(RIGHT_MOTOR_BACKWARD, LOW); // Ensure right motor backward is off
+}
+
+void stop() {
+  digitalWrite(LEFT_MOTOR_FORWARD, LOW); // Stop left motor forward
+  digitalWrite(LEFT_MOTOR_BACKWARD, LOW); // Ensure left motor backward is off
+  digitalWrite(RIGHT_MOTOR_FORWARD, LOW); // Stop right motor forward
+  digitalWrite(RIGHT_MOTOR_BACKWARD, LOW); // Ensure right motor backward is off
+}
