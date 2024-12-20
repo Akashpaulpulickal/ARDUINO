@@ -1,0 +1,80 @@
+#include <Wire.h>
+#include <RTClib.h>
+#include <LiquidCrystal.h>
+
+// Initialize the RTC library
+RTC_DS3231 rtc; // or RTC_DS1307 rtc;
+
+// Initialize the LCD library with the pins
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+void setup() {
+  // Initialize serial communication for debugging
+  Serial.begin(9600);
+  // Initialize the LCD
+  lcd.begin(16, 2);
+  lcd.print("RTC Module Test");
+
+  // Check if the RTC is connected
+  if (!rtc.begin()) {
+    Serial.println("Couldn't find RTC");
+    while (1);
+  }
+
+  // Check if the RTC lost power and set the time if needed
+  if (rtc.lostPower()) {
+    Serial.println("RTC lost power, setting the time!");
+    // rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); // Uncomment to set the time to the compile time
+    rtc.adjust(DateTime(2024, 12, 20, 12, 0, 0)); // Set manually to December 20, 2024, 12:00:00
+  }
+}
+
+void loop() {
+  // Get the current time
+  DateTime now = rtc.now();
+  
+  // Print the current time to the Serial Monitor
+  Serial.print(now.year(), DEC);
+  Serial.print('/');
+  Serial.print(now.month(), DEC);
+  Serial.print('/');
+  Serial.print(now.day(), DEC);
+  Serial.print(" ");
+  Serial.print(now.hour(), DEC);
+  Serial.print(':');
+  Serial.print(now.minute(), DEC);
+  Serial.print(':');
+  Serial.println(now.second(), DEC);
+
+  // Display the current time on the LCD
+  lcd.setCursor(0, 1);
+  lcd.print(now.hour());
+  lcd.print(':');
+  lcd.print(now.minute());
+  lcd.print(':');
+  lcd.print(now.second());
+
+  // Wait for a second before updating the display
+  delay(1000);
+}
+
+/*
+  Connections:
+  1. RTC Module:
+     - VCC (Power) -> 5V on Arduino
+     - GND (Ground) -> GND on Arduino
+     - SDA -> Analog pin A4 on Arduino
+     - SCL -> Analog pin A5 on Arduino
+
+  2. 16x2 LCD Display:
+     - VCC -> 5V on Arduino
+     - GND -> GND on Arduino
+     - RS -> Digital pin 12 on Arduino
+     - E -> Digital pin 11 on Arduino
+     - D4 -> Digital pin 5 on Arduino
+     - D5 -> Digital pin 4 on Arduino
+     - D6 -> Digital pin 3 on Arduino
+     - D7 -> Digital pin 2 on Arduino
+     - A (Anode) -> Potentiometer for contrast adjustment
+     - K (Cathode) -> GND
+*/
