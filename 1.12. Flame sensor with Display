@@ -1,0 +1,58 @@
+#include <LiquidCrystal.h>
+
+// Initialize the LCD library with the pins
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+const int flameSensorPin = A0; // Analog pin connected to the flame sensor output
+const int threshold = 500;     // Threshold value to detect flame
+
+void setup() {
+  // Initialize the LCD
+  lcd.begin(16, 2);
+  lcd.print("Flame Detector");
+  
+  // Initialize serial communication for debugging
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read the value from the flame sensor
+  int sensorValue = analogRead(flameSensorPin);
+
+  // Print the sensor value to the Serial Monitor
+  Serial.print("Flame Sensor Value: ");
+  Serial.println(sensorValue);
+
+  // Display the result on the LCD
+  lcd.setCursor(0, 1);
+  if (sensorValue > threshold) {
+    lcd.print("Flame Detected ");
+    Serial.println("Flame Detected");
+  } else {
+    lcd.print("No Flame      ");
+    Serial.println("No Flame");
+  }
+
+  // Wait for a short period before reading the sensor value again
+  delay(500);
+}
+
+/*
+  Connections:
+  1. Flame Sensor:
+     - VCC (Power) -> 5V on Arduino
+     - GND (Ground) -> GND on Arduino
+     - AOUT (Analog Output) -> Analog pin A0 on Arduino
+
+  2. 16x2 LCD Display:
+     - VCC -> 5V on Arduino
+     - GND -> GND on Arduino
+     - RS -> Digital pin 12 on Arduino
+     - E -> Digital pin 11 on Arduino
+     - D4 -> Digital pin 5 on Arduino
+     - D5 -> Digital pin 4 on Arduino
+     - D6 -> Digital pin 3 on Arduino
+     - D7 -> Digital pin 2 on Arduino
+     - A (Anode) -> Potentiometer for contrast adjustment
+     - K (Cathode) -> GND
+*/
