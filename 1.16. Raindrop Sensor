@@ -1,0 +1,44 @@
+const int raindropSensorPin = A0; // Analog pin connected to raindrop sensor output
+const int ledPin = 8;             // Digital pin connected to LED
+const int threshold = 500;        // Threshold value for detecting raindrops
+
+void setup() {
+  // Initialize the LED pin as an output
+  pinMode(ledPin, OUTPUT);
+  // Initialize serial communication for debugging
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read the value from the raindrop sensor
+  int sensorValue = analogRead(raindropSensorPin);
+  
+  // Print the sensor value to the Serial Monitor
+  Serial.print("Raindrop Sensor Value: ");
+  Serial.println(sensorValue);
+
+  // If raindrops are detected, turn on the LED
+  if (sensorValue < threshold) {
+    digitalWrite(ledPin, HIGH);
+    Serial.println("Raindrops detected!");
+  } else {
+    // If no raindrops are detected, turn off the LED
+    digitalWrite(ledPin, LOW);
+    Serial.println("No raindrops.");
+  }
+
+  // Wait for a short period before reading the sensor value again
+  delay(1000);
+}
+
+/*
+  Connections:
+  1. Raindrop Sensor:
+     - VCC (Power) -> 5V on Arduino
+     - GND (Ground) -> GND on Arduino
+     - AO (Analog Output) -> Analog pin A0 on Arduino
+
+  2. LED:
+     - Anode (longer leg) -> Digital pin 8 on Arduino
+     - Cathode (shorter leg) -> 220-ohm resistor -> GND
+*/
