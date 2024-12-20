@@ -1,0 +1,21 @@
+// Define the pins for the laser and buzzer
+#define LASER_PIN 9 // Laser connected to digital pin 9
+#define BUZZER_PIN 10 // Buzzer connected to digital pin 10
+
+void setup() {
+  // Set the laser and buzzer pins as output
+  pinMode(LASER_PIN, OUTPUT); // Set laser pin as output
+  pinMode(BUZZER_PIN, OUTPUT); // Set buzzer pin as output
+}
+
+void loop() {
+  // Turn on the laser and buzzer
+  digitalWrite(LASER_PIN, HIGH); // Turn on the laser
+  digitalWrite(BUZZER_PIN, HIGH); // Turn on the buzzer
+  delay(1000); // Wait for 1 second
+
+  // Turn off the laser and buzzer
+  digitalWrite(LASER_PIN, LOW); // Turn off the laser
+  digitalWrite(BUZZER_PIN, LOW); // Turn off the buzzer
+  delay(1000); // Wait for 1 second
+}
