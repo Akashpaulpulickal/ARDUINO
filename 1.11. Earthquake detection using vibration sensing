@@ -1,0 +1,64 @@
+#include <SoftwareSerial.h>
+
+// Define the pins
+const int vibrationSensorPin = 2; // Digital pin connected to vibration sensor output
+const int rxPin = 8;              // RX pin connected to GSM TX
+const int txPin = 7;              // TX pin connected to GSM RX
+
+// Create a software serial object for the GSM module
+SoftwareSerial sim800l(rxPin, txPin);
+
+void setup() {
+  // Initialize the vibration sensor pin as an input
+  pinMode(vibrationSensorPin, INPUT);
+  
+  // Initialize the GSM module
+  sim800l.begin(9600);
+  delay(1000);
+  
+  // Check if the GSM module is started
+  if (sim800l.available()) {
+    Serial.println("GSM module started");
+  } else {
+    Serial.println("GSM module not started");
+  }
+  
+  // Send AT commands to check GSM module status
+  sim800l.println("AT");
+  delay(1000);
+  sim800l.println("AT+CMGF=1"); // Set SMS mode to text
+  delay(1000);
+  sim800l.println("AT+CMGS=\"YourPhoneNumber\"\r\n"); // Replace with your phone number
+  delay(1000);
+}
+
+void loop() {
+  // Read the value from the vibration sensor
+  int sensorValue = digitalRead(vibrationSensorPin);
+  
+  // If vibration is detected, send an SMS
+  if (sensorValue == HIGH) {
+    sim800l.println("Vibration detected! Earthquake alert!");
+    delay(1000);
+    sim800l.println((char)26); // Send Ctrl+Z to indicate end of message
+    delay(1000);
+  }
+  
+  // Wait for a short period before reading the sensor value again
+  delay(500);
+}
+
+/*
+  Connections:
+  1. Vibration Sensor:
+     - VCC (Power) -> 5V on Arduino
+     - GND (Ground) -> GND on Arduino
+     - OUT (Output) -> Digital pin 2 on Arduino
+
+  2. SIM800L GSM Module:
+     - VCC -> 5V on Arduino
+     - GND -> GND on Arduino
+     - TX -> Digital pin 7 on Arduino
+     - RX -> Digital pin 8 on Arduino
+     - SIM card -> Insert into the SIM800L module
+*/
