@@ -1,0 +1,45 @@
+// IR Sensor-controlled LED
+
+const int irSensorPin = 2;  // Digital pin connected to IR sensor output
+const int ledPin = 13;      // Digital pin connected to LED
+
+void setup() {
+  // Initialize the LED pin as an output:
+  pinMode(ledPin, OUTPUT);
+  // Initialize the IR sensor pin as an input:
+  pinMode(irSensorPin, INPUT);
+  // Initialize serial communication for debugging:
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read the value from the IR sensor:
+  int sensorValue = digitalRead(irSensorPin);
+
+  // Print the sensor value to the Serial Monitor:
+  Serial.print("IR Sensor Value: ");
+  Serial.println(sensorValue);
+
+  // If an object is detected, turn the LED on:
+  if (sensorValue == LOW) {
+    digitalWrite(ledPin, HIGH);
+  } else {
+    // If no object is detected, turn the LED off:
+    digitalWrite(ledPin, LOW);
+  }
+
+  // Wait for a short period before reading the sensor value again:
+  delay(100);
+}
+
+/*
+  Connections:
+  1. IR Sensor:
+     - VCC (Power) -> 5V on Arduino
+     - GND (Ground) -> GND on Arduino
+     - OUT (Output) -> Digital pin 2 on Arduino
+
+  2. LED:
+     - Anode (longer leg) -> Digital pin 13 on Arduino
+     - Cathode (shorter leg) -> 220-ohm resistor -> GND
+*/
