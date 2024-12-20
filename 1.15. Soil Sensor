@@ -1,0 +1,51 @@
+const int soilSensorPin = A0;  // Analog pin connected to soil moisture sensor
+const int relayPin = 8;        // Digital pin connected to relay module
+const int threshold = 500;     // Threshold value for dry soil
+
+void setup() {
+  // Initialize the relay pin as an output
+  pinMode(relayPin, OUTPUT);
+  // Initialize serial communication for debugging
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read the value from the soil moisture sensor
+  int sensorValue = analogRead(soilSensorPin);
+  
+  // Print the sensor value to the Serial Monitor
+  Serial.print("Soil Moisture Value: ");
+  Serial.println(sensorValue);
+
+  // If the soil is too dry, turn on the water pump
+  if (sensorValue < threshold) {
+    digitalWrite(relayPin, HIGH);
+    Serial.println("Watering the plant...");
+  } else {
+    // If the soil is wet enough, turn off the water pump
+    digitalWrite(relayPin, LOW);
+    Serial.println("Soil is moist.");
+  }
+
+  // Wait for a short period before reading the sensor value again
+  delay(1000);
+}
+
+/*
+  Connections:
+  1. Soil Moisture Sensor:
+     - VCC (Power) -> 5V on Arduino
+     - GND (Ground) -> GND on Arduino
+     - AO (Analog Output) -> Analog pin A0 on Arduino
+
+  2. Relay Module:
+     - VCC -> 5V on Arduino
+     - GND -> GND on Arduino
+     - IN -> Digital pin 8 on Arduino
+     - COM -> Water pump positive terminal
+     - NO -> Water pump positive terminal (when relay is activated)
+
+  3. Water Pump:
+     - Positive terminal -> COM and NO on the relay module
+     - Negative terminal -> GND
+*/
