@@ -1,0 +1,79 @@
+#include <Servo.h>
+#include <SoftwareSerial.h>
+
+// Define the pins for the Bluetooth module and servos
+#define RX 2 // RX pin of HC-05 connected to digital pin 2
+#define TX 3 // TX pin of HC-05 connected to digital pin 3
+
+// Define the servo pins
+#define SERVO1 9
+#define SERVO2 10
+#define SERVO3 11
+#define SERVO4 12
+#define SERVO5 5
+#define SERVO6 6
+#define SERVO7 7
+#define SERVO8 8
+
+Servo servo1, servo2, servo3, servo4, servo5, servo6, servo7, servo8;
+SoftwareSerial bluetooth(RX, TX); // Create a software serial port for Bluetooth
+
+void setup() {
+  // Attach the servos to their respective pins
+  servo1.attach(SERVO1);
+  servo2.attach(SERVO2);
+  servo3.attach(SERVO3);
+  servo4.attach(SERVO4);
+  servo5.attach(SERVO5);
+  servo6.attach(SERVO6);
+  servo7.attach(SERVO7);
+  servo8.attach(SERVO8);
+
+  // Start the Bluetooth serial communication
+  bluetooth.begin(9600); // Set Bluetooth communication baud rate to 9600
+  Serial.begin(9600); // Set serial communication baud rate to 9600
+}
+
+void loop() {
+  if (bluetooth.available()) {
+    char command = bluetooth.read(); // Read the command from the Bluetooth module
+
+    switch (command) {
+      case 'F': // Move forward
+        moveForward();
+        break;
+      case 'B': // Move backward
+        moveBackward();
+        break;
+      case 'L': // Turn left
+        turnLeft();
+        break;
+      case 'R': // Turn right
+        turnRight();
+        break;
+      case 'S': // Stop
+        stop();
+        break;
+    }
+  }
+}
+
+void moveForward() {
+  // Add code to move the robot forward
+}
+
+void moveBackward() {
+  // Add code to move the robot backward
+}
+
+void turnLeft() {
+  // Add code to turn the robot left
+}
+
+void turnRight() {
+  // Add code to turn the robot right
+}
+
+void stop() {
+  // Add code to stop the robot
+}
