@@ -1,0 +1,45 @@
+// Hall Sensor-controlled LED
+
+const int hallPin = 2;  // Pin connected to the Hall effect sensor output
+const int ledPin = 13;  // Pin connected to the LED
+
+void setup() {
+  // Initialize the LED pin as an output:
+  pinMode(ledPin, OUTPUT);
+  // Initialize the Hall sensor pin as an input:
+  pinMode(hallPin, INPUT);
+  // Initialize serial communication for debugging:
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read the value from the Hall effect sensor:
+  int sensorValue = digitalRead(hallPin);
+
+  // Print the sensor value to the Serial Monitor:
+  Serial.print("Hall Sensor Value: ");
+  Serial.println(sensorValue);
+
+  // If a magnetic field is detected, turn the LED on:
+  if (sensorValue == LOW) {
+    digitalWrite(ledPin, HIGH);
+  } else {
+    // If no magnetic field is detected, turn the LED off:
+    digitalWrite(ledPin, LOW);
+  }
+
+  // Wait for a short period before reading the sensor value again:
+  delay(100);
+}
+
+/*
+  Connections:
+  1. Hall Effect Sensor:
+     - VCC (Power) -> 5V on Arduino
+     - GND (Ground) -> GND on Arduino
+     - OUT (Output) -> Digital pin 2 on Arduino
+
+  2. LED:
+     - Anode (longer leg) -> Digital pin 13 on Arduino
+     - Cathode (shorter leg) -> 220-ohm resistor -> GND
+*/
