@@ -1,0 +1,82 @@
+#include <SoftwareSerial.h>
+
+// Define the pins for the Bluetooth module and motors
+#define RX 2 // RX pin of HC-05 connected to digital pin 2
+#define TX 3 // TX pin of HC-05 connected to digital pin 3
+#define LEFT_MOTOR_FORWARD 9 // Left motor forward pin connected to digital pin 9
+#define LEFT_MOTOR_BACKWARD 10 // Left motor backward pin connected to digital pin 10
+#define RIGHT_MOTOR_FORWARD 11 // Right motor forward pin connected to digital pin 11
+#define RIGHT_MOTOR_BACKWARD 12 // Right motor backward pin connected to digital pin 12
+
+SoftwareSerial bluetooth(RX, TX); // Create a software serial port for Bluetooth
+
+void setup() {
+  // Set the motor pins as output
+  pinMode(LEFT_MOTOR_FORWARD, OUTPUT); // Set left motor forward pin as output
+  pinMode(LEFT_MOTOR_BACKWARD, OUTPUT); // Set left motor backward pin as output
+  pinMode(RIGHT_MOTOR_FORWARD, OUTPUT); // Set right motor forward pin as output
+  pinMode(RIGHT_MOTOR_BACKWARD, OUTPUT); // Set right motor backward pin as output
+
+  // Start the Bluetooth serial communication
+  bluetooth.begin(9600); // Set Bluetooth communication baud rate to 9600
+  Serial.begin(9600); // Set serial communication baud rate to 9600
+}
+
+void loop() {
+  if (bluetooth.available()) {
+    char command = bluetooth.read(); // Read the command from the Bluetooth module
+
+    switch (command) {
+      case 'F': // Move forward
+        moveForward();
+        break;
+      case 'B': // Move backward
+        moveBackward();
+        break;
+      case 'L': // Turn left
+        turnLeft();
+        break;
+      case 'R': // Turn right
+        turnRight();
+        break;
+      case 'S': // Stop
+        stop();
+        break;
+    }
+  }
+}
+
+void moveForward() {
+  digitalWrite(LEFT_MOTOR_FORWARD, HIGH); // Move left motor forward
+  digitalWrite(LEFT_MOTOR_BACKWARD, LOW); // Ensure left motor backward is off
+  digitalWrite(RIGHT_MOTOR_FORWARD, HIGH); // Move right motor forward
+  digitalWrite(RIGHT_MOTOR_BACKWARD, LOW); // Ensure right motor backward is off
+}
+
+void moveBackward() {
+  digitalWrite(LEFT_MOTOR_FORWARD, LOW); // Ensure left motor forward is off
+  digitalWrite(LEFT_MOTOR_BACKWARD, HIGH); // Move left motor backward
+  digitalWrite(RIGHT_MOTOR_FORWARD, LOW); // Ensure right motor forward is off
+  digitalWrite(RIGHT_MOTOR_BACKWARD, HIGH); // Move right motor backward
+}
+
+void turnLeft() {
+  digitalWrite(LEFT_MOTOR_FORWARD, LOW); // Ensure left motor forward is off
+  digitalWrite(LEFT_MOTOR_BACKWARD, HIGH); // Move left motor backward
+  digitalWrite(RIGHT_MOTOR_FORWARD, HIGH); // Move right motor forward
+  digitalWrite(RIGHT_MOTOR_BACKWARD, LOW); // Ensure right motor backward is off
+}
+
+void turnRight() {
+  digitalWrite(LEFT_MOTOR_FORWARD, HIGH); // Move left motor forward
+  digitalWrite(LEFT_MOTOR_BACKWARD, LOW); // Ensure left motor backward is off
+  digitalWrite(RIGHT_MOTOR_FORWARD, LOW); // Ensure right motor forward is off
+  digitalWrite(RIGHT_MOTOR_BACKWARD, HIGH); // Move right motor backward
+}
+
+void stop() {
+  digitalWrite(LEFT_MOTOR_FORWARD, LOW); // Stop left motor forward
+  digitalWrite(LEFT_MOTOR_BACKWARD, LOW); // Ensure left motor backward is off
+  digitalWrite(RIGHT_MOTOR_FORWARD, LOW); // Stop right motor forward
+  digitalWrite(RIGHT_MOTOR_BACKWARD, LOW); // Ensure right motor backward is off
+}
