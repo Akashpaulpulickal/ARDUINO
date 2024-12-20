@@ -39,3 +39,10 @@ void loop() {
   2. DHT11 GND -> GND on Arduino
   3. DHT11 Data Pin -> Digital Pin 2 on Arduino
 */
+
+
+
+
+
+
+
