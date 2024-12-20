@@ -1,0 +1,46 @@
+// LDR-controlled LED
+
+int ldrPin = A0; // Analog pin connected to LDR
+int ledPin = 9;  // Digital pin connected to LED
+int ldrValue = 0; // Variable to store the LDR value
+int threshold = 500; // Threshold value for darkness
+
+void setup() {
+  // Initialize the digital pin as an output:
+  pinMode(ledPin, OUTPUT);
+  // Initialize serial communication for debugging:
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read the value from the LDR:
+  ldrValue = analogRead(ldrPin);
+  // Print the LDR value to the Serial Monitor:
+  Serial.print("LDR Value: ");
+  Serial.println(ldrValue);
+
+  // Check if the LDR value is below the threshold:
+  if (ldrValue < threshold) {
+    // If it is dark, turn the LED on:
+    digitalWrite(ledPin, HIGH);
+  } else {
+    // If it is not dark, turn the LED off:
+    digitalWrite(ledPin, LOW);
+  }
+
+  // Wait for a short period before reading the LDR value again:
+  delay(500);
+}
+
+/*
+  Connections:
+  1. LDR:
+     - One end to 5V
+     - The other end to A0 (analog pin)
+     - A 10k ohm resistor between the LDR end connected to A0 and GND
+
+  2. LED:
+     - Anode (longer leg) to digital pin 9
+     - Cathode (shorter leg) to a 220-ohm resistor
+     - The other end of the resistor to GND
+*/
