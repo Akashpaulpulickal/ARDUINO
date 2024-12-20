@@ -15,3 +15,19 @@ void loop() {
   // Wait for a second
   delay(1000);
 }
+
+
+
+
+
+
+
+
+Connecting the LED:
+LED Anode (longer leg): Connect this to digital pin 13 on the Arduino board.
+
+LED Cathode (shorter leg): Connect this to a 220-ohm resistor.
+
+Resistor: Connect the other end of the resistor to the GND (ground) pin on the Arduino.
+
+
